@@ -56,6 +56,7 @@ def num_days():
         num_days += 1
     return num_days
 
+#Creating form for new expense
 def expense_new(request):
     if request.method == "POST":
         form = ExpenseForm(request.POST)
