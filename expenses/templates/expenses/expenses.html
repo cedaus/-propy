@@ -1,0 +1,44 @@
+  <html>
+    <head>
+        <title>cedaus</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">List of Expenses</a></h1>
+            <a href="{% url 'expense_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        </div>
+
+        <div>
+          {% load custom_filters %}
+        </div>
+
+        <div>
+        <h2>Month Total is Rs.{{ total_expense }}</h2>
+        {% for key in diversify_expenses %}
+           <p>On {{ key }} you spent Rs.{{ diversify_expenses|get_item:key }}</p>
+        {% endfor %}
+        </div>
+
+        <div>
+          <h3>Avg per day is Rs.{{ avg_expense }}</h3>
+        </div>
+
+        <div>
+        <h2>Expenses by Date</h2>
+        {% for key in expenses.keys %}
+          <h3>{{ key }}</h3>
+
+          {% for expense in expenses|get_item:key %}
+          <p>For {{ expense.title }} is Rs.{{ expense.amount }} | {{ expense.tag }}</p>
+          {% endfor %}
+
+          <h4>Day total is Rs.{{ daily_total|get_item:key }}</h4>
+        {% endfor %}
+        </div>
+
+
+    </body>
+</html>
