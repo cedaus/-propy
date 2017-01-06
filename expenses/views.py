@@ -69,7 +69,7 @@ def expense_new(request):
             amount = request.POST.get('amount', '')
             expense_new = Expense(date = date, title = title, tag = tag, comment = comment, amount = amount)
             expense_new.save()"""
-            return HttpResponseRedirect(reverse('expenses:expense_new'))
+            return HttpResponseRedirect(reverse('expense_new'))
     else:
         form = ExpenseForm()
     return render(request, 'expenses/expense_new.html', {'form': ExpenseForm()})

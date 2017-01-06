@@ -10,9 +10,9 @@
           <h1><a href="">New Expense</a></h1>
       </div>
 
-      <from action="" method="POST">{% csrf_token %}
+      <form action="" method="POST">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <input type="submit" value="Submit">
       </form>
 
   </body>
