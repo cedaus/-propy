@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+  Expenses
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'expenses_style.css' %}">
+<script src="{% static 'expenses_app.js' %}"></script>
+{% endblock %}
+
+{% block sections %}
+<section id="content">
+  <div class="container">
+    <div class="card">
+      <div class="pm-body clearfix">
+        <!-- Navigation Tab -->
+        <ul class="tab-nav tn-justified">
+          <li class="active waves-effect"><a href="">Calendar</a></li>
+          <li class="waves-effect"><a href="">Report</a></li>
+        </ul>
+        <div class="pmb-block">
+          <div class="listview lv-bordered lv-lg">
+            <!-- Control Bar -->
+            <div class="lv-header-alt clearfix">
+              <h2 class="lvh-label hidden-xs">Some text here</h2>
+              <ul class="lv-actions actions">
+                <li><a data-toggle="modal" href="#detail-expense"><i class=""></i></a></li>
+              </ul>
+            </div>
+            <!-- Section Body -->
+            <script id="entry-template" type="text/x-handlebars-template">
+              <div class="entry">
+                <h1>{{month_total}}</h1>
+                <div class="body">
+                  {{month_avg}}
+                </div>
+              </div>
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block modals %}
+<!-- Submit Expense -->
+<div class="modal fade" id="detail-expense" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Expense</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Please fill the following details to submit a new expense</p>
+          </div>
+          <div class="col-xs-4">
+            <div class="fg-line form-group">
+              <input id="expense-date" type="text" class="form-control input-sm" placeholder="Select Date">
+            </div>
+          </div>
+          <div class="col-xs-12 hide">
+            <div class="fg-line form-group">
+              <input id="expense-pk" type="text" class="form-control input-sm" placeholder="Primary Key">
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="fg-line form-group">
+              <input id="expense-title" type="text" class="form-control input-sm" placeholder="Title">
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="m-b-15">
+              {% for tag in all_tags %}
+              <button class="btn btn-default btn-icon waves-effect waves-circle waves-float" onclick="selectTag({{tag.id}})"><i class="{{tag.icon}}"></i></button>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              <div class="fg-line disabled">
+                <input id="expense-tag" type="text" class="form-control" val="" placeholder="Select Tag" disabled="" data-tag-id="" data-tag-name="" data-tag-icon="">
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="fg-line form-group">
+              <textarea id="expense-comment" rows="5" class="form-control fg-input" placeholder="Comments"></textarea>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="fg-line form-group">
+              <input id="expense-amount" type="number" class="form-control input-sm" placeholder="Enter Amount">
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="checkbox m-b-15">
+              <label><input id="expense-important" type="checkbox" value="false" onclick="checkboxToggle(this)"><i class="input-helper"></i> Mark Important</label>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="checkbox m-b-15">
+              <label><input id="expense-extra" type="checkbox" value="false" onclick="checkboxToggle(this)"><i class="input-helper"></i> Mark Extra</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="submit-expense" class="btn btn-link" onclick="submitExpense()">Submit</button>
+        <button data-dismiss="modal" class="btn btn-link" onclick="resetExpenseFields()">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+
+var today = {year: 2017, month: 2, day: 9, date: "2017-02-09"};
+var calendar = {year: today.year, month: today.month, day: today.day};
+var all_tags = [];
+var month_total = 0;
+var month_avg = 0;
+var month_daily_data = [];
+var day_data = {};
+
+$(document).ready(function() {
+  var all_tags_check = '{{all_tags}}';
+  if(all_tags_check) {
+    {% for tag in all_tags %}
+    var tag_obj = new Object();
+    tag_obj.id = '{{tag.id}}';
+    tag_obj.name = '{{tag.name}}';
+    tag_obj.icon = '{{tag.icon}}';
+    all_tags.push(tag_obj);
+    {% endfor %}
+  }
+});
+
+$(document).ready(function() {
+  getExpenseCalendar(today.year, today.month);
+});
+
+function showYearMonthExpense() {
+  calendar.year = 2017;
+  calendar.month = 2;
+  getExpenseCalendar(calendar.year, calendar.month);
+}
+
+function showDayExpense() {
+  calendar.day = 9;
+  day_data = month_daily_data[calendar.day - 1];
+  renderTemplate("#day-expense", day_data)
+}
+
+function getExpenseCalendar(year, month) {
+  var data = {"year": year, "month": month}
+  $.ajax({
+    type: "GET",
+    url: "{% url 'expense_calendar' %}",
+    data: data,
+    dataType: "json",
+    success: function(response) {
+      month_total = response.month_total;
+      month_avg = response.month_avg;
+      month_daily_data = response.month_daily_data;
+    },
+    error: function(request, errorType, errorMessage) {
+      alert("Error: " + errorType + " with message: " + errorMessage);
+    },
+    beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
+    complete: function() {
+      renderTemplate("#month-expense", month_daily_data);
+    },
+    cache: true
+  });
+}
+
+function selectTag(tag_id) {
+  var selected_tag = $.grep(all_tags, function(e) { return e.id == tag_id; });
+  var tag_name = selected_tag[0].name;
+  var tag_icon = selected_tag[0].icon;
+  $("#expense-tag").attr("data-tag-id", tag_id);
+  $("#expense-tag").attr("data-tag-name", tag_name);
+  $("#expense-tag").attr("data-tag-icon", tag_icon);
+  $("#expense-tag").val(tag_name);
+}
+
+function resetExpenseFields() {
+  $("#expense-date").val(today.date);
+  $("#expense-title").val('');
+  $("#expense-tag").val('')
+  $("#expense-tag").attr("data-tag-id", " ");
+  $("#expense-tag").attr("data-tag-name", " ");
+  $("#expense-tag").attr("data-tag-icon", " ");
+  $("#expense-comment").val('');
+  $("#expense-amount").val('');
+  checkboxReset("#expense-important", false);
+  checkboxReset("#expense-extra", false);
+}
+
+function submitExpense() {
+  var date = $("#expense-date").val();
+  var pk = $("#expense-pk").val();
+  var title = $("#expense-title").val();
+  var tag_id = $("#expense-tag").attr("data-tag-id");
+  console.log(tag_id);
+  var comment = $("#expense-comment").val();
+  var amount = Number($("#expense-amount").val());
+  var important = $("#expense-important").val();
+  var extra = $("#expense-extra").val();
+  var test_passed = true;
+  if (!date) {
+    test_passed = false;
+  }
+  else if (!title) {
+    test_passed = false;
+  }
+  else if (!tag_id) {
+    test_passed = false;
+  }
+  else if (!amount) {
+    test_passed = false;
+  }
+  else if (test_passed && pk == "") {
+    var data = {"date": date, "title": title, "tag_id": tag_id, "comment": comment, "amount": amount, "important": important, "extra": extra};
+    $.ajax({
+      type: "PUT",
+      url: "{% url 'expense_new' %}",
+      data: data,
+      dataType: "json",
+      success: function(response) {
+        var year = Number(response.date.split("-")[0]);
+        var month = Number(response.date.split("-")[1]);
+        var day = Number(response.date.split("-")[2]);
+        var amount = response.amount;
+
+        if(year == calendar.year && month == calendar.month) {
+          month_daily_data[day-1].day_total += amount;
+          month_daily_data[day-1].day_expenses.push(response);
+        }
+      },
+      error: function(request, errorType, errorMessage) {
+        alert("Error: " + errorType + " with message: " + errorMessage);
+      },
+      beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
+      complete: function() {
+        resetExpenseFields();
+        renderTemplate("#month-expense", month_daily_data);
+      },
+      cache: true
+    });
+  }
+  else if (test_passed && pk != "") {
+    var data = {"date": date, "title": title, "tag_id": tag_id, "comment": comment, "amount": amount, "important": important, "extra": extra};
+    $.ajax({
+      type: "POST",
+      url: "/api/expenses/expense/"+pk+"/",
+      data: data,
+      dataType: "json",
+      success: function(response) {
+        var year = Number(response.date.split("-")[0]);
+        var month = Number(response.date.split("-")[1]);
+        var day = Number(response.date.split("-")[2]);
+        var amount = response.amount;
+
+        if(year == calendar.year && month == calendar.month) {
+          month_daily_data[day-1].day_total += amount;
+          month_daily_data[day-1].day_expenses.push(response);
+        }
+      },
+      error: function(request, errorType, errorMessage) {
+        alert("Error: " + errorType + " with message: " + errorMessage);
+      },
+      beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
+      complete: function() {
+        resetExpenseFields();
+        day_data = month_expense_data[calendar.day];
+        renderTemplate("#day-expense", day_data);
+      },
+      cache: true
+    });
+  }
+}
+
+function editExpense() {
+
+}
+
+function deleteExpense() {
+
+}
+
+function renderTemplate(elm, context){
+  var source   = $(elm).html();
+  var template = Handlebars.compile(source);
+  var html = template(context);
+}
+
+</script>
+{% endblock %}

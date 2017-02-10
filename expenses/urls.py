@@ -2,6 +2,5 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^expenses/$', views.publish_expenses, name='publish_expenses'),
-    url(r'^expenses/new/$', views.expense_new, name='expense_new'),
+    url(r'^expenses/calendar/$', views.req_expenses_calendar, name='req_expenses_calendar'),
 ]

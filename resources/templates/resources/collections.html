@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+  Resources
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'resources_style.css' %}">
+<script src="{% static 'resources_app.js' %}"></script>
+{% endblock %}
+
+{% block control-tab %}
+<li><a>Collections</a></li>
+<li><a href="{% url 'req_category_resources_list' category.id %}">Resources</a></li>
+{% endblock %}
+
+{% block sections %}
+<section id="collections-category">
+  <header class="section-header">
+  </header>
+  <div class="section-body">
+    {{collections}}
+  </div>
+  <footer class="section-footer">
+  </footer>
+</section>
+{% endblock %}

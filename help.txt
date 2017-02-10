@@ -1,0 +1,56 @@
+Deleting objects from an array based on key value
+----------------------------------------------------------
+http://stackoverflow.com/questions/21659888/javascript-find-and-remove-object-in-array-based-on-key-value
+
+Adding scroll bar
+------------------------------------------------
+http://stackoverflow.com/questions/4646708/css-how-to-get-scrollbars-for-div-inside-container-of-fixed-height
+
+Inserting Django URLs in .js file
+------------------------------------------------
+http://stackoverflow.com/questions/27932983/django-static-path-in-javascript-file
+
+Hide and Show div for a particular time
+------------------------------------------------
+http://stackoverflow.com/questions/4127527/how-to-show-div-for-10-seconds-and-then-hide-it
+
+Get month date in python
+------------------------------------------------
+https://docs.python.org/2/library/calendar.html
+http://stackoverflow.com/questions/12030187/getting-current-date-and-current-time-only-respectively
+
+Get data attribute value from html tag
+------------------------------------------------
+http://www.w3schools.com/tags/att_global_data.asp
+use getAttribute("data-*") with document or function parameter
+use .data() or attr("data-*") with $()
+
+Get div using data-attribute
+-------------------------------------------------
+http://stackoverflow.com/questions/2487747/selecting-element-by-data-attribute
+
+Making Queries
+------------------------------------------------
+https://docs.djangoproject.com/en/1.10/topics/db/queries/
+
+Custom Templates
+------------------------------------------------
+https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#writing-custom-template-filters
+
+Request & Response Objects
+------------------------------------------------
+https://docs.djangoproject.com/en/1.10/ref/request-response/#httpresponse-subclasses
+https://docs.djangoproject.com/en/1.10/topics/http/shortcuts/#example
+
+render_to_select
+------------------------------------------------
+http://stackoverflow.com/questions/18976302/returning-rendered-html-via-ajax
+
+csrf token
+------------------------------------------------
+http://stackoverflow.com/questions/32953673/how-to-return-new-csrf-token-at-ajax-post-in-django
+https://docs.djangoproject.com/en/1.8/ref/csrf/#ajax
+
+
+<h3>17/01/2017</h3>
+<h4>Spent INR<span></span> on <span></span></h4>

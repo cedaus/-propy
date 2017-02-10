@@ -1,0 +1,87 @@
+{% load custom_filters %}
+
+<style>
+.day-box {
+  height: 120px;
+  padding: 5px;
+  border-top: 4px solid #EFF0F1;
+  border-right: 1px solid #EFF0F1;
+  border-bottom: 1px solid #EFF0F1;
+}
+.day-box:hover {
+  background-color: #EFF0F1;
+  border-top: 4px solid #676D76;
+}
+.day-box h4 {
+  font-size: 14px;
+  color: #383838;
+}
+.day-box h3 {
+  margin-top: 20px;
+  font-size: 25px;
+  color: #676D76;
+  text-align: center;
+  vertical-align: middle;
+  opacity: 0.9;
+}
+</style>
+
+<div class="grd-row">
+  {% for date in month_expenses.month_daily_expenses %}
+  <div class="grd-col grd-col-2 day-box" onclick="openDayExpenses(this)" data-day-num="{{ forloop.counter }}">
+    <h4>{{ forloop.counter }}</h4>
+    <h3><i class="fa fa-inr"></i>{{ date.total }}</h3>
+  </div>
+  {% endfor %}
+</div>
+
+
+<!-- Day Expenses Modal -->
+<div id="day-expenses-modal" class="">
+  <div class="modal-dialog">
+  </div>
+</div>
+
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function openDayExpenses(day) {
+  var monthNumber = {{ month_expenses.month_num }};
+  var dayNumber = day.getAttribute("data-day-num");
+  console.log("opening day expenses modal");
+  $.ajax({
+    type: "POST",
+    url: "{% url 'show_day_expenses' %}",
+    data: {month_id: monthNumber, day_id: dayNumber},
+    dataType: "html",
+    headers: { "X-CSRFToken": getCookie("csrftoken") },
+    success: function(response) {
+      $("#day-expenses-modal").find(".modal-dialog").fadeIn();
+      $("#day-expenses-modal").find(".modal-dialog").html(response);
+    },
+    error: function(request, errorType, errorMessage) {
+      alert("Error: " + errorType + " with message: " + errorMessage);
+    },
+    timeout: 3000,
+    beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken')); },
+    complete: function() {},
+    cache: true
+  });
+}
+
+
+</script>

@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+  Resources
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'resources_style.css' %}">
+<script src="{% static 'resources_app.js' %}"></script>
+{% endblock %}
+
+{% block sections %}
+<section id="content">
+  <div class="container">
+    <div class="card">
+      <div class="pm-body clearfix">
+        <!-- Navigation Tab -->
+        <ul class="tab-nav tn-justified">
+          <li class="waves-effect"><a href="{% url 'req_category_collections' category.id %}">Collections</a></li>
+          <li class="active waves-effect"><a href="">Resources List</a></li>
+        </ul>
+        <div class="pmb-block">
+          <div class="listview lv-bordered lv-lg">
+            <!-- Control Bar -->
+            <div class="lv-header-alt clearfix">
+              <h2 class="lvh-label hidden-xs">Some text here</h2>
+              <div class="lvh-search">
+                <input id="filter-resources" type="text" placeholder="Start typing..." class="lvhs-input" onkeyup="filterResourcesListSearch()"><i class="lvh-search-close">×</i>
+              </div>
+              <ul class="lv-actions actions">
+                <li><a href="" class="lvh-search-trigger"><i class=""></i></a></li>
+                <li><a data-toggle="modal" href="#filter-resources-tags"><i class=""></i></a></li>
+                <li><a data-toggle="modal" href="#add-resource"><i class=""></i></a></li>
+              </ul>
+            </div>
+            <!-- Section Body -->
+            <div class="lv-body">
+              {% for resource in resources_list %}
+              <div id="resource-{{forloop.counter}}" class="lv-item media">
+                <div class="media-body">
+                  <h4 class="lv-title"><a href="{{resource.link}}" target="_blank" class="title">{{resource.title}}</a></h4>
+                  <ul class="lv-attrs">
+                    {% for tag in resource.tags.all %}
+                    <li>{{tag.name}}</li>
+                    {% endfor %}
+                  </ul>
+                  <div class="lv-actions actions dropdown">
+                    <a data-toggle="dropdown" aria-expanded="true"><i class="fa fa-ellipsis-v"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li><a href="">Edit</a></li>
+                      <li><a href="">Delete</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block modals %}
+<!-- Filter Resources Modal -->
+<div class="modal fade" id="filter-resources-tags" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Filter Tags</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Filter your search using tags like python, javascript, css, html...</p>
+          </div>
+          <div class="col-xs-12">
+            <div class="fg-line form-group">
+              <input type="text" class="form-control input-sm" placeholder="Filter Tags">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-link" href="#submitotp" data-dismiss="modal">Filter</a>
+        <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Resources -->
+<div class="modal fade" id="add-resource" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Resource</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Please fill the following details to submit a new resource</p>
+          </div>
+          <div id="resource-title" class="col-xs-12">
+            <div class="fg-line form-group">
+              <input type="text" class="form-control input-sm" placeholder="Title">
+            </div>
+          </div>
+          <div id="resource-link" class="col-xs-12">
+            <div class="fg-line form-group">
+              <input type="text" class="form-control input-sm" placeholder="Source Link">
+            </div>
+          </div>
+          <div id="resource-category" class="col-xs-6">
+            <div class="form-group">
+              <div class="fg-line">
+                <div class="select">
+                  <select class="form-control">
+                    {% for item in all_categories %}
+                    <option value="{{item.id}}">{{item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="resource-publisher" class="col-xs-6">
+            <div class="form-group">
+              <div class="fg-line">
+                <div class="select">
+                  <select class="form-control">
+                    {% for item in all_publishers %}
+                    <option value="{{item.id}}">{{item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="resource-tags" class="col-xs-12">
+            <div class="fg-line form-group">
+              <input type="text" class="form-control input-sm" placeholder="Select Tags">
+            </div>
+          </div>
+          <div id="resource-comment" class="col-xs-12">
+            <div class="fg-line form-group">
+              <textarea rows="5" class="form-control fg-input" placeholder="Comments"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="submit-resource" class="btn btn-link" data-dismiss="modal">Submit</button>
+        <button class="btn btn-link" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+
+var resources_list = [];
+
+$(document).ready(function() {
+  var resources_list_check = '{{resources_list}}';
+  if(resources_list_check) {
+    {% for resource in resources_list %}
+    var resource_obj = new Object();
+    resource_obj.title = '{{resource.title}}';
+    resource_obj.category = '{{resource.category}}';
+    resource_obj.publisher = '{{resource.publisher}}';
+    resource_obj.link = '{{resource.link}}';
+    resource_obj.tags = [{% for tag in resource.tags.all %} {'id':'{{tag.id}}', 'name': '{{ tag.name }}'}, {% endfor %}];
+    resource_obj.pk = '{{resource.pk}}';
+    resources_list.push(resource_obj);
+    {% endfor %}
+  }
+  $("#resource-category").find("select").val("{{category.id}}");
+  $("#resource-publisher").find("select").val("5");
+});
+
+function submitResource() {
+  var category = $("#resource-category").val();
+}
+
+function filterResourcesListSearch() {
+  var input = $("#filter-resources");
+  var filter = input.val().toLowerCase();
+  for (var i = 0; i < resources_list.length; i++) {
+    var resource = $("#resource-" + (i + 1));
+    if (resource.find(".title").html().toLowerCase().indexOf(filter) > -1) {
+      resource.removeClass("hide");
+    }
+    else {
+      resource.addClass("hide");
+    }
+  }
+}
+
+$("#submit-resource").click(function() {
+  submitResource();
+});
+</script>
+{% endblock %}

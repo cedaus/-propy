@@ -1,0 +1,35 @@
+<html>
+  <head>
+      <title>cedaus</title>
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+      <div>
+        <h1><a href="">Question Detail</a></h1>
+      </div>
+
+      <div>
+        {% load custom_filters %}
+      </div>
+
+      <div>
+        <h1>{{ question.question_text }}</h1>
+        {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+      </div>
+
+      <div>
+        <form action=""{% url 'vote' question.id %}"" method="POST"> {% csrf_token %}
+          {% for choice in question.choice_set.all %}
+              <input type="radio" id="choice{{ forloop.counter }}" name="choice" value="{{ choice.id }}" />
+              <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+          {% endfor %}
+          <input type="submit" value="Vote" />
+        </form>
+      </div>
+
+  </body>
+</html>

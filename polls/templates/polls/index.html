@@ -1,0 +1,29 @@
+<html>
+  <head>
+      <title>cedaus</title>
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+      <div>
+          <h1><a href="">Polls</a></h1>
+      </div>
+
+      <div>
+        {% load custom_filters %}
+      </div>
+
+      <div>
+        {% if latest_question_list %}
+            <ul>
+              {% for question in latest_question_list %}
+                    <li><a href="{% url 'vote' question.id %}">{{ question.question_text }}</a></li>
+              {% endfor %}
+            </ul>
+        {% else %}
+           <p>No polls are available.</p>
+        {% endif %}
+      </div>
+  </body>
+</html>

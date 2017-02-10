@@ -1,0 +1,29 @@
+<header class="modal-header">
+  <a class="close-modal" href="#"><i class="fa fa-close"></i></a>
+  <h4 class="modal-title">{{day_num}}/{{month_num}}/2017</h4>
+</header>
+<div class="modal-body">
+  <div id="day-expenses-list">
+    <ul>
+      {% for expense in expenses %}
+      <li>
+        <a class="tag" data-tag="{{ expense.tag }}"><i class="fa fa-{{ expense.tag_icon }}"></i></a>
+        <h3 class="title">{{ expense.title }}</h3>
+        <h3 class="amount"><i class="fa fa-inr"></i>{{ expense.amount }}</h3>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="expense-info"></div>
+  <div id="expense-edit"></div>
+  <div id="expense-delete"></div>
+</div>
+<footer class="modal-footer">
+</footer>
+
+<script>
+$('.close-modal').click(function() {
+  $(".modal-dialog").fadeOut();
+  showMonthExpCal(month_id);
+});
+</script>
