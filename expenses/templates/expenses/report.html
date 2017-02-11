@@ -35,6 +35,7 @@
             </div>
             <!-- Expense Report -->
             <div id="expense-report">
+              <canvas id="year-expense-chart" width="400" height="100"></canvas>
             </div>
           </div>
         </div>
@@ -67,10 +68,82 @@
 <script>
 var expense_report_html = "{% static 'html/expense-report.html' %}";
 
-function loadReport () {
-  var context = {month_name: "Feb"};
+$(document).ready(function() {
+  var context = {month_total: 2500, tags: [{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500}]};
   $("#expense-report").html(renderTemplate(expense_report_html, context));
+  loadMonthExpenseChart();
+  loadYearExpenseChart();
+});
+
+</script>
+
+<script>
+
+function loadMonthExpenseChart() {
+  var ctx = document.getElementById("month-expense-chart");
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          datasets: [{
+              label: 'Day Total',
+              data: [500, 19, 300, 5, 2, 3],
+              backgroundColor: [
+                  'rgba(54, 162, 235, 0.2)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
 }
 
+function loadYearExpenseChart() {
+  var ctx = document.getElementById("year-expense-chart");
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+              label: 'Month Total',
+              data: [500, 19, 3, 5, 2, 3],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
+}
 </script>
 {% endblock %}
