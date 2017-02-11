@@ -71,6 +71,7 @@ var expense_report_html = "{% static 'html/expense-report.html' %}";
 $(document).ready(function() {
   var context = {month_total: 2500, tags: [{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500}]};
   $("#expense-report").html(renderTemplate(expense_report_html, context));
+  loadTagExpenseChart();
   loadMonthExpenseChart();
   loadYearExpenseChart();
 });
@@ -78,6 +79,22 @@ $(document).ready(function() {
 </script>
 
 <script>
+
+function loadTagExpenseChart() {
+  var ctx = document.getElementById("tag-expense-chart");
+  var myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+          labels: ["Food", "Travel", "Phone", "House Utility", "Health", "Education", "Entertainment", "Laundry", "Salon", "Shopping", "House", "Other"],
+          datasets: [{
+              label: 'Day Total',
+              data: [10, 2, 1, 5, 2, 3, 5, 9, 15, 11, 4, 7],
+              backgroundColor: ["#FF6384","#36A2EB","#C34A4F","#FFCE56","#8bc34a","#4BC0C0","#C34A8B","#C3Bf4A","#266B23","#50236B","#C3834A","#6B6223"],
+              borderWidth: 1
+          }]
+      }
+  });
+}
 
 function loadMonthExpenseChart() {
   var ctx = document.getElementById("month-expense-chart");
@@ -88,9 +105,7 @@ function loadMonthExpenseChart() {
           datasets: [{
               label: 'Day Total',
               data: [500, 19, 300, 5, 2, 3],
-              backgroundColor: [
-                  'rgba(54, 162, 235, 0.2)'
-              ],
+              backgroundColor: 'rgba(139, 195, 74, 0.7)',
               borderWidth: 1
           }]
       },
@@ -114,23 +129,9 @@ function loadYearExpenseChart() {
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [{
               label: 'Month Total',
-              data: [500, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
-              ],
+              data: [500, 300, 3, 5, 2, 3, 500, 250, 120, 780, 460, 230],
+              backgroundColor: 'rgba(48, 100, 145, 0.6)',
+              borderColor: 'rgba(48, 100, 145, 1)',
               borderWidth: 1
           }]
       },
