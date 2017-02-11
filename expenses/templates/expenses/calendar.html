@@ -205,6 +205,7 @@ function selectTag(tag_id) {
 
 function resetExpenseFields() {
   $("#expense-date").val(today.date);
+  $("#expense-pk").val('');
   $("#expense-title").val('');
   $("#expense-tag").val('')
   $("#expense-tag").attr("data-tag-id", " ");
@@ -317,6 +318,7 @@ function submitExpense() {
 function addExpense() {
   $("#expense-detail").find(".modal-title").html("Add Expense");
   $("#expense-detail").find(".modal-message").html("Please fill the following details to submit a new expense");
+  resetExpenseFields();
 }
 
 function editExpense(pk) {
