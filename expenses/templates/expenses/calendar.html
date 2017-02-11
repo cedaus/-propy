@@ -124,7 +124,7 @@
 
 <script>
 
-var today = {year: Number(moment.format('YYYY')), month: Number(moment.format('M')), day: Number(moment.format('D')), date: Number(moment.format('YYYY-MM-DD'))};
+var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: Number(moment().format('YYYY-MM-DD'))};
 var calendar = {year: today.year, month: today.month, day: today.day};
 var calendar_date;
 var all_tags = [];
