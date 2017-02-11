@@ -1,5 +1,5 @@
 import calendar
-from mysite.utils import get_current_year, get_current_month, get_current_day, get_month_total_days
+from mysite.utils import get_date_str, get_current_year, get_current_month, get_current_day, get_month_total_days
 from .models import ExpenseTag, Expense
 
 def all_tags_total_amount(expenses):
@@ -42,9 +42,10 @@ def get_month_daily_data(year, month):
     month_total_days = get_month_total_days(year, month)
     expenses = get_month_expenses(year, month)
 
-    daily_data = [{'day_total' : 0, 'day_expenses': []} for i in range(month_total_days)]
+    daily_data = [{'day_date': None, 'day_total' : 0, 'day_expenses': []} for i in range(month_total_days)]
     for expense in expenses:
         day = int(expense.date.strftime("%d"))
+        daily_data[day - 1]['day_date'] = get_date_str(year, month, day)
         daily_data[day - 1]['day_total'] += expense.amount
         daily_data[day - 1]['day_expenses'].append(expense)
     return daily_data

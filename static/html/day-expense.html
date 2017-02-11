@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{day_date}}</h4>
+</div>
+<div class="modal-body">
+  <div class="row table-responsive">
+    <table class="table">
+      <colgroup>
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+        <col width="5%"><col width="5%">
+    </colgroup>
+      <tbody>
+        {{#each day_expenses}}
+        <tr>
+          <td colspan=1><i class="{{tag.icon}}"></i></td>
+          <td colspan=6>{{title}}</td>
+          <td colspan=1><span class="pull-right">extra</span></td>
+          <td colspan=2><span class="pull-right"><i class="fa fa-inr p-r-5 o-pnt5"></i>{{amount}}</span></td>
+          <td colspan=1></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button id="submit-expense" class="btn btn-link" data-toggle="modal" href="#expense-detail" data-dismiss="modal">Add New</button>
+  <button data-dismiss="modal" class="btn btn-link" onclick="resetExpenseFields()">Close</button>
+</div>

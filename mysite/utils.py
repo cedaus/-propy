@@ -26,6 +26,10 @@ def get_date_obj(date_str):
     ret = datetime.strptime(date_str, "%Y-%m-%d").date()
     return ret
 
+def get_date_str(year, month, day):
+    ret = date(year, month, day).strftime('%Y-%m-%d')
+    return ret
+
 def get_current_year():
     year = int(datetime.now().year)
     return year

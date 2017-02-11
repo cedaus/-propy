@@ -3,6 +3,9 @@
 __pycache__
 myvenv
 db.sqlite3
-/static
+/static/css
+/static/img
+/static/js
+/static/fonts
 /z-extras
 .DS_Store
