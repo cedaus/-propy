@@ -124,7 +124,7 @@
 
 <script>
 
-var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: Number(moment().format('YYYY-MM-DD'))};
+var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: moment().format('YYYY-MM-DD')};
 var calendar = {year: today.year, month: today.month, day: today.day};
 var calendar_date;
 var all_tags = [];
@@ -319,6 +319,10 @@ function addExpense() {
   $("#expense-detail").find(".modal-title").html("Add Expense");
   $("#expense-detail").find(".modal-message").html("Please fill the following details to submit a new expense");
   resetExpenseFields();
+}
+
+function infoExpense() {
+  //Need to be created
 }
 
 function editExpense(pk) {

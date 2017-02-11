@@ -18,17 +18,17 @@
     </colgroup>
       <tbody class="nicescroll-rails nicescroll-rails-vr">
         {{#each expenses}}
-        <tr id="expense-{{pk}}">
+        <tr id="expense-{{pk}}" data-toggle="modal" href="#expense-info" data-dismiss="modal" onclick="infoExpense({{pk}})">
           <td colspan=1 class="p-l-15"><i class="{{tag.icon}}"></i></td>
-          <td colspan=6><span data-toggle="modal" href="#expense-detail" data-dismiss="modal" onclick="editExpense({{pk}})">{{title}}</span></td>
+          <td colspan=6><span>{{title}}</span></td>
           <td colspan=1><span class="pull-right">extra</span></td>
           <td colspan=2><span class="pull-right"><i class="fa fa-inr p-r-5 o-pnt5"></i>{{amount}}</span></td>
           <td colspan=1 class="p-r-15">
             <div class="lv-actions actions dropdown pull-right">
               <a data-toggle="dropdown" aria-expanded="true"><i class="fa fa-ellipsis-v"></i></a>
               <ul class="dropdown-menu dropdown-menu-right">
-                <li><a data-toggle="modal" href="#expense-detail" onclick="editExpense({{pk}})">Edit</a></li>
-                <li><a data-toggle="modal" href="#expense-detail" onclick="deleteExpense({{pk}})">Delete</a></li>
+                <li><a data-toggle="modal" href="#expense-detail" data-dismiss="modal" onclick="editExpense({{pk}})">Edit</a></li>
+                <li><a onclick="deleteExpense({{pk}})">Delete</a></li>
               </ul>
            </div>
           </td>
