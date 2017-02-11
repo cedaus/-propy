@@ -18,19 +18,22 @@
       <div class="pm-body clearfix">
         <!-- Navigation Tab -->
         <ul class="tab-nav tn-justified">
-          <li class="active waves-effect"><a href="">Calendar</a></li>
-          <li class="waves-effect"><a href="">Report</a></li>
+          <li class="active waves-effect"><a>Calendar</a></li>
+          <li class="waves-effect"><a href="{% url 'req_expenses_report' %}">Report</a></li>
         </ul>
         <div class="pmb-block">
           <div class="listview lv-bordered lv-lg">
             <!-- Control Bar -->
             <div class="lv-header-alt clearfix">
-              <h2 class="lvh-label hidden-xs">Some text here</h2>
               <ul class="lv-actions actions">
-                <li><a data-toggle="modal" href="#expense-detail" onclick="addExpense()"><i class=""></i></a></li>
+                <li><a data-toggle="modal" href="#expense-detail" onclick="addExpense()"><i class="zmdi zmdi-plus-circle"></i></a></li>
               </ul>
+              <ul class="lv-actions actions">
+                <li><a onclick="addExpense()"><i class="zmdi zmdi-calendar-check"></i></a></li>
+              </ul>
+              <h2 class="lvh-label hidden-xs pull-right">Year and Month here</h2>
             </div>
-            <!-- Section Body -->
+            <!-- Expense Calendar -->
             <div id="expense-calendar" class="card-body">
             </div>
           </div>
@@ -129,7 +132,6 @@
 
 
 {% block script %}
-
 <script>
 
 var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: moment().format('YYYY-MM-DD')};

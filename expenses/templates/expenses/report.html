@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+  Expenses
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'expenses_style.css' %}">
+<script src="{% static 'expenses_app.js' %}"></script>
+{% endblock %}
+
+{% block sections %}
+<section id="content">
+  <div class="container">
+    <div class="card">
+      <div class="pm-body clearfix">
+        <!-- Navigation Tab -->
+        <ul class="tab-nav tn-justified">
+          <li class="waves-effect"><a href="{% url 'req_expenses_calendar' %}">Calendar</a></li>
+          <li class="active waves-effect"><a>Report</a></li>
+        </ul>
+        <div class="pmb-block">
+          <div class="listview lv-bordered lv-lg">
+            <!-- Control Bar -->
+            <div class="lv-header-alt clearfix">
+              <ul class="lv-actions actions">
+                <li><a data-toggle="modal" href="#expense-detail" onclick="addExpense()"><i class="zmdi zmdi-plus-circle"></i></a></li>
+              </ul>
+              <ul class="lv-actions actions">
+                <li><a onclick="addExpense()"><i class="zmdi zmdi-calendar-check"></i></a></li>
+              </ul>
+              <h2 class="lvh-label hidden-xs pull-right">Year and Month here</h2>
+            </div>
+            <!-- Expense Report -->
+            <div id="expense-report">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block modals %}
+<!-- Important Expense Modal -->
+<div class="modal fade" id="important-expense" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!--Need to be built -->
+    </div>
+  </div>
+</div>
+<!-- Extra Expense Modal -->
+<div class="modal fade" id="extra-expense" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!--Need to be built -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+var expense_report_html = "{% static 'html/expense-report.html' %}";
+
+function loadReport () {
+  var context = {month_name: "Feb"};
+  $("#expense-report").html(renderTemplate(expense_report_html, context));
+}
+
+</script>
+{% endblock %}

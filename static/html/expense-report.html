@@ -1,0 +1,166 @@
+<!-- Month General Data -->
+<div class="card-body card-padding b-b-1">
+  <div class="mini-charts">
+    <div class="row">
+      <div id="month-total" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Total</small>
+                      <h2><i class="fa fa-inr p-r-10"></i>{{month_total}}</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-avg" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                    <small>Average</small>
+                    <h2><i class="fa fa-inr p-r-10"></i>{{month_avg}}</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-important" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                    <small>Important Expenses Total</small>
+                    <h2><i class="fa fa-inr p-r-10"></i>{{month_important}}</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-extra" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                    <small>Extra Expenses Total</small>
+                    <h2><i class="fa fa-inr p-r-10"></i>{{month_extra}}</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Month Tags Expense -->
+<div class="card-body card-padding b-b-1">
+  <div class="row">
+    <div class="col-xs-8">
+      {{#each tags}}
+      <div class="col-sm-4" data-tag-id="{{tag.id}}"><p><span><i class="{{tag.icon}} p-r-5"></i>{{tag.name}}</span><span class="pull-right"><i class="fa fa-inr">{{tag.amount}}</i></span></p></div>
+      {{/each}}
+    </div>
+    <div class="col-xs-4">
+      Tag Donut Chart
+    </div>
+  </div>
+</div>
+<!-- Month Expense Chart -->
+<div class="card-body card-padding b-b-1">
+  <div class="mini-charts">
+    <div class="row">
+      <div id="month-total" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-avg" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-important" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-extra" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Year Expense Chart -->
+<div class="card-body card-padding">
+  <div class="mini-charts">
+    <div class="row">
+      <div id="month-total" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-avg" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-important" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="month-extra" class="col-sm-6 col-md-3">
+          <div class="mini-charts-item bgm-lightgreen m-0">
+              <div class="clearfix">
+                  <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                  <div class="count">
+                      <small>Website Traffics</small>
+                      <h2>987,459</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

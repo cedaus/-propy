@@ -8,3 +8,9 @@ def req_expenses_calendar(request):
     all_tags = ExpenseTag.objects.all()
     data = {'all_tags': all_tags}
     return render(request, 'expenses/calendar.html', data)
+
+#Request Expenses Report
+def req_expenses_report(request):
+    all_tags = ExpenseTag.objects.all()
+    data = {'all_tags': all_tags}
+    return render(request, 'expenses/report.html', data)
