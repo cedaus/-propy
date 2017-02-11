@@ -1,8 +1,8 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{day_date}}</h4>
+  <h4 class="modal-title">{{date}}</h4>
 </div>
-<div class="modal-body">
-  <div class="row table-responsive">
+<div class="modal-body c-overflow mCustomScrollbar _mCS_1 mCS-autoHide">
+  <div class="row table-responsive min-h-300">
     <table class="table">
       <colgroup>
         <col width="5%"><col width="5%">
@@ -16,14 +16,22 @@
         <col width="5%"><col width="5%">
         <col width="5%"><col width="5%">
     </colgroup>
-      <tbody>
-        {{#each day_expenses}}
-        <tr>
-          <td colspan=1><i class="{{tag.icon}}"></i></td>
-          <td colspan=6>{{title}}</td>
+      <tbody class="nicescroll-rails nicescroll-rails-vr">
+        {{#each expenses}}
+        <tr id="expense-{{pk}}">
+          <td colspan=1 class="p-l-15"><i class="{{tag.icon}}"></i></td>
+          <td colspan=6><span data-toggle="modal" href="#expense-detail" data-dismiss="modal" onclick="editExpense({{pk}})">{{title}}</span></td>
           <td colspan=1><span class="pull-right">extra</span></td>
           <td colspan=2><span class="pull-right"><i class="fa fa-inr p-r-5 o-pnt5"></i>{{amount}}</span></td>
-          <td colspan=1></td>
+          <td colspan=1 class="p-r-15">
+            <div class="lv-actions actions dropdown pull-right">
+              <a data-toggle="dropdown" aria-expanded="true"><i class="fa fa-ellipsis-v"></i></a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a data-toggle="modal" href="#expense-detail" onclick="editExpense({{pk}})">Edit</a></li>
+                <li><a data-toggle="modal" href="#expense-detail" onclick="deleteExpense({{pk}})">Delete</a></li>
+              </ul>
+           </div>
+          </td>
         </tr>
         {{/each}}
       </tbody>
@@ -31,6 +39,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button id="submit-expense" class="btn btn-link" data-toggle="modal" href="#expense-detail" data-dismiss="modal">Add New</button>
+  <button id="submit-expense" class="btn btn-link" data-toggle="modal" href="#expense-detail" data-dismiss="modal" onclick="addExpense()">Add New</button>
   <button data-dismiss="modal" class="btn btn-link" onclick="resetExpenseFields()">Close</button>
 </div>

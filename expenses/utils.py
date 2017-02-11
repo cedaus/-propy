@@ -42,10 +42,10 @@ def get_month_daily_data(year, month):
     month_total_days = get_month_total_days(year, month)
     expenses = get_month_expenses(year, month)
 
-    daily_data = [{'day_date': None, 'day_total' : 0, 'day_expenses': []} for i in range(month_total_days)]
+    daily_data = [{'date': None, 'total' : 0, 'expenses': []} for i in range(month_total_days)]
     for expense in expenses:
         day = int(expense.date.strftime("%d"))
-        daily_data[day - 1]['day_date'] = get_date_str(year, month, day)
-        daily_data[day - 1]['day_total'] += expense.amount
-        daily_data[day - 1]['day_expenses'].append(expense)
+        daily_data[day - 1]['date'] = get_date_str(year, month, day)
+        daily_data[day - 1]['total'] += expense.amount
+        daily_data[day - 1]['expenses'].append(expense)
     return daily_data

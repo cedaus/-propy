@@ -16,8 +16,8 @@ class ExpenseCalendar(APIView):
         month_avg = get_month_avg(year, month)
         month_daily_data = get_month_daily_data(year, month)
         for i, item in enumerate(month_daily_data):
-            sdata = serializers.ExpenseSerializer(item['day_expenses'], many=True).data
-            month_daily_data[i]['day_expenses'] = sdata
+            sdata = serializers.ExpenseSerializer(item['expenses'], many=True).data
+            month_daily_data[i]['expenses'] = sdata
         data = {'month_total': month_total, 'month_avg': month_avg, 'month_daily_data':  month_daily_data}
         return Response(data, status=status.HTTP_200_OK)
 
@@ -60,6 +60,6 @@ class Expense(APIView):
 
     def delete(self, request, pk, format=None):
         expense_obj = get_object_or_404(models.Expense, pk=pk)
+        sdata = serializers.ExpenseSerializer(expense_obj).data
         expense_obj.delete()
-        sdata = serializers.ExpertexpenseSerializer(expert.expense.all(), many=True).data
         return Response(sdata, status=status.HTTP_200_OK)

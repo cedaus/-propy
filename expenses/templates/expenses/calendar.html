@@ -27,7 +27,7 @@
             <div class="lv-header-alt clearfix">
               <h2 class="lvh-label hidden-xs">Some text here</h2>
               <ul class="lv-actions actions">
-                <li><a data-toggle="modal" href="#expense-detail"><i class=""></i></a></li>
+                <li><a data-toggle="modal" href="#expense-detail" onclick="addExpense()"><i class=""></i></a></li>
               </ul>
             </div>
             <!-- Section Body -->
@@ -47,12 +47,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Add Expense</h4>
+        <h4 class="modal-title">Title</h4>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-xs-12">
-            <p>Please fill the following details to submit a new expense</p>
+            <p class="modal-message">Message</p>
           </div>
           <div class="col-xs-4">
             <div class="fg-line form-group">
@@ -104,8 +104,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button id="submit-expense" class="btn btn-link" onclick="submitExpense()">Submit</button>
-        <button data-dismiss="modal" class="btn btn-link" onclick="resetExpenseFields()">Discard</button>
+        <button id="submit-expense" class="btn btn-link" data-dismiss="modal" onclick="submitExpense()">Submit</button>
+        <button class="btn btn-link" data-dismiss="modal" onclick="resetExpenseFields()">Discard</button>
       </div>
     </div>
   </div>
@@ -153,6 +153,11 @@ $(document).ready(function() {
   getExpenseCalendar(today.year, today.month);
 });
 
+function loadCalendar() {
+  var context = {month_daily_data: month_daily_data};
+  $("#expense-calendar").html(renderTemplate(expense_calendar_html, context));
+}
+
 function showYearMonthExpense() {
   calendar.year = 2017;
   calendar.month = 2;
@@ -182,8 +187,7 @@ function getExpenseCalendar(year, month) {
     },
     beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
     complete: function() {
-      var context = {month_daily_data: month_daily_data};
-      $("#expense-calendar").html(renderTemplate(expense_calendar_html, context));
+      loadCalendar();
     },
     cache: true
   });
@@ -217,7 +221,6 @@ function submitExpense() {
   var pk = $("#expense-pk").val();
   var title = $("#expense-title").val();
   var tag_id = $("#expense-tag").attr("data-tag-id");
-  console.log(tag_id);
   var comment = $("#expense-comment").val();
   var amount = Number($("#expense-amount").val());
   var important = $("#expense-important").val();
@@ -246,11 +249,11 @@ function submitExpense() {
         var year = Number(response.date.split("-")[0]);
         var month = Number(response.date.split("-")[1]);
         var day = Number(response.date.split("-")[2]);
-        var amount = response.amount;
 
         if(year == calendar.year && month == calendar.month) {
-          month_daily_data[day-1].day_total += amount;
-          month_daily_data[day-1].day_expenses.push(response);
+          month_daily_data[day-1].date = response.date;
+          month_daily_data[day-1].total += response.amount;
+          month_daily_data[day-1].expenses.push(response);
         }
       },
       error: function(request, errorType, errorMessage) {
@@ -259,9 +262,7 @@ function submitExpense() {
       beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
       complete: function() {
         resetExpenseFields();
-        var context = {month_daily_data: month_daily_data};
-        console.log(context);
-        $("#expense-calendar").html(renderTemplate(expense_calendar_html, context));
+        loadCalendar();
       },
       cache: true
     });
@@ -277,11 +278,27 @@ function submitExpense() {
         var year = Number(response.date.split("-")[0]);
         var month = Number(response.date.split("-")[1]);
         var day = Number(response.date.split("-")[2]);
-        var amount = response.amount;
 
         if(year == calendar.year && month == calendar.month) {
-          month_daily_data[day-1].day_total += amount;
-          month_daily_data[day-1].day_expenses.push(response);
+          if (day == calendar.day) {
+            console.log("A");
+            var old_expense = $.grep(day_data.expenses, function(e) { return e.pk == pk; })[0];
+            day_data.total -= old_expense.amount;
+            day_data.total += response.amount;
+            $.grep(day_data.expenses, function(e, i) {
+              if (e.pk == pk) {
+                day_data.expenses[i] = response;
+              }
+            });
+          }
+          else {
+            console.log("B");
+            day_data.total -= response.amount;
+            day_data.expenses = $.grep(day_data.expenses, function(e) { return e.pk != pk; });
+            month_daily_data[day-1].date = response.date;
+            month_daily_data[day-1].total += response.amount;
+            month_daily_data[day-1].expenses.push(response);
+          }
         }
       },
       error: function(request, errorType, errorMessage) {
@@ -290,21 +307,60 @@ function submitExpense() {
       beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
       complete: function() {
         resetExpenseFields();
-        day_data = month_expense_data[calendar.day];
-        $("#day-expense").html(renderTemplate(day_expense_html, day_data));
+        loadCalendar();
       },
       cache: true
     });
   }
 }
 
-function editExpense() {
-
+function addExpense() {
+  $("#expense-detail").find(".modal-title").html("Add Expense");
+  $("#expense-detail").find(".modal-message").html("Please fill the following details to submit a new expense");
 }
 
-function deleteExpense() {
-
+function editExpense(pk) {
+  $("#expense-detail").find(".modal-title").html("Edit Expense");
+  $("#expense-detail").find(".modal-message").html("Please edit the following details");
+  var expense = $.grep(day_data.expenses, function(e) { return e.pk == pk; })[0];
+  $("#expense-date").val(expense.date);
+  $("#expense-pk").val(expense.pk);
+  $("#expense-title").val(expense.title);
+  selectTag(expense.tag.id);
+  $("#expense-comment").val(expense.comment);
+  $("#expense-amount").val(expense.amount);
+  checkboxReset("#expense-important", expense.important);
+  checkboxReset("#expense-extra", expense.extra);
 }
 
+function deleteExpense(pk) {
+  $.ajax({
+    type: "DELETE",
+    url: "/api/expenses/expense/"+pk+"/",
+    data: "",
+    dataType: "json",
+    success: function(response) {
+      var year = Number(response.date.split("-")[0]);
+      var month = Number(response.date.split("-")[1]);
+      var day = Number(response.date.split("-")[2]);
+
+      if(year == calendar.year && month == calendar.month && day == calendar.day) {
+        day_data.total -= response.amount;
+        day_data.expenses = $.grep(day_data.expenses, function(e) { return e.pk != pk; });
+      }
+    },
+    error: function(request, errorType, errorMessage) {
+      alert("Error: " + errorType + " with message: " + errorMessage);
+    },
+    beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
+    complete: function() {
+      $("#expense-"+pk).remove();
+      loadCalendar();
+    },
+    cache: true
+  });
+}
+
+//Update by cedaus on 11th Feb 2017
 </script>
 {% endblock %}
