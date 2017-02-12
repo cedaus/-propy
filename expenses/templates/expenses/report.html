@@ -69,7 +69,7 @@
 var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: moment().format('YYYY-MM-DD')};
 var calendar = {year: today.year, month: today.month, day: today.day};
 
-var month_total, month_avg, month_important, month_extra, month_tags, month_daily_data;
+var month_total, month_avg, month_important, month_extra, month_tags, month_daily_data, year_monthly_total;
 
 var expense_report_html = "{% static 'html/expense-report.html' %}";
 
@@ -135,6 +135,7 @@ function loadMonthExpenseChart() {
 }
 
 function loadYearExpenseChart() {
+  var data = year_monthly_total;
   var ctx = document.getElementById("year-expense-chart");
   var myChart = new Chart(ctx, {
       type: 'bar',
@@ -142,7 +143,7 @@ function loadYearExpenseChart() {
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [{
               label: 'Month Total',
-              data: [500, 300, 3, 5, 2, 3, 500, 250, 120, 780, 460, 230],
+              data: data,
               backgroundColor: 'rgba(48, 100, 145, 0.6)',
               borderColor: 'rgba(48, 100, 145, 1)',
               borderWidth: 1
@@ -168,15 +169,14 @@ function getExpenseReport(year, month) {
     data: data,
     dataType: "json",
     success: function(response) {
-      console.log(response);
       month_total = response.month_total;
       month_avg = response.month_avg;
       month_important = response.month_important;
       month_extra = response.month_extra;
       month_tags = response.month_tags;
       month_daily_data = response.month_daily_data;
+      year_monthly_total = response.year_monthly_total;
       loadReport(response);
-      console.log(response);
     },
     error: function(request, errorType, errorMessage) {
       alert("Error: " + errorType + " with message: " + errorMessage);
