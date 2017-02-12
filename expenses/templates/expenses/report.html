@@ -66,29 +66,36 @@
 
 {% block script %}
 <script>
+var today = {year: Number(moment().format('YYYY')), month: Number(moment().format('M')), day: Number(moment().format('D')), date: moment().format('YYYY-MM-DD')};
+var calendar = {year: today.year, month: today.month, day: today.day};
+
+var month_total, month_avg, month_important, month_extra, month_tags, month_daily_data;
+
 var expense_report_html = "{% static 'html/expense-report.html' %}";
 
 $(document).ready(function() {
-  var context = {month_total: 2500, tags: [{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500},{id: 1, name: "food", icon: "fa fa-cutlery", amount: 500}]};
-  $("#expense-report").html(renderTemplate(expense_report_html, context));
-  loadTagExpenseChart();
-  loadMonthExpenseChart();
-  loadYearExpenseChart();
+  getExpenseReport(today.year, today.month);
 });
 
-</script>
-
-<script>
+function loadReport(context) {
+  $("#expense-report").html(renderTemplate(expense_report_html, context));
+}
 
 function loadTagExpenseChart() {
+  var labels = [];
+  var data = [];
+  for (var i = 0; i < month_tags.length; i++) {
+    labels.push(month_tags[i].name);
+    data.push(month_tags[i].total)
+  }
   var ctx = document.getElementById("tag-expense-chart");
   var myChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-          labels: ["Food", "Travel", "Phone", "House Utility", "Health", "Education", "Entertainment", "Laundry", "Salon", "Shopping", "House", "Other"],
+          labels: labels,
           datasets: [{
               label: 'Day Total',
-              data: [10, 2, 1, 5, 2, 3, 5, 9, 15, 11, 4, 7],
+              data: data,
               backgroundColor: ["#FF6384","#36A2EB","#C34A4F","#FFCE56","#8bc34a","#4BC0C0","#C34A8B","#C3Bf4A","#266B23","#50236B","#C3834A","#6B6223"],
               borderWidth: 1
           }]
@@ -97,14 +104,20 @@ function loadTagExpenseChart() {
 }
 
 function loadMonthExpenseChart() {
+  var labels = [];
+  var data = [];
+  for (var i = 0; i < month_daily_data.length; i++) {
+    labels.push(String(i+1));
+    data.push(month_daily_data[i].total)
+  }
   var ctx = document.getElementById("month-expense-chart");
   var myChart = new Chart(ctx, {
       type: 'line',
       data: {
-          labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          labels: labels,
           datasets: [{
               label: 'Day Total',
-              data: [500, 19, 300, 5, 2, 3],
+              data: data,
               backgroundColor: 'rgba(139, 195, 74, 0.7)',
               borderWidth: 1
           }]
@@ -146,5 +159,43 @@ function loadYearExpenseChart() {
       }
   });
 }
+
+function getExpenseReport(year, month) {
+  var data = {"year": year, "month": month};
+  $.ajax({
+    type: "GET",
+    url: "{% url 'expense_report' %}",
+    data: data,
+    dataType: "json",
+    success: function(response) {
+      console.log(response);
+      month_total = response.month_total;
+      month_avg = response.month_avg;
+      month_important = response.month_important;
+      month_extra = response.month_extra;
+      month_tags = response.month_tags;
+      month_daily_data = response.month_daily_data;
+      loadReport(response);
+      console.log(response);
+    },
+    error: function(request, errorType, errorMessage) {
+      alert("Error: " + errorType + " with message: " + errorMessage);
+    },
+    beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}"); },
+    complete: function(data) {
+      loadTagExpenseChart();
+      loadMonthExpenseChart();
+      loadYearExpenseChart();
+    },
+    cache: true
+  });
+}
+
+function showYearMonthExpense() {
+  calendar.year = 2017;
+  calendar.month = 2;
+  getExpenseReport(calendar.year, calendar.month);
+}
+
 </script>
 {% endblock %}

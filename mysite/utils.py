@@ -4,6 +4,12 @@ from django.http import Http404
 from datetime import datetime, date
 from calendar import monthrange
 
+def get_dict_index_from_list(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return i
+    return -1
+
 def get_value_or_404(dict_, key):
     try:
         return dict_[key]
