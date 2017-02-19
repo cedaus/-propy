@@ -29,9 +29,9 @@
                 <li><a data-toggle="modal" href="#expense-detail" onclick="addExpense()"><i class="zmdi zmdi-plus-circle"></i></a></li>
               </ul>
               <ul class="lv-actions actions">
-                <li><a onclick="addExpense()"><i class="zmdi zmdi-calendar-check"></i></a></li>
+                <li><a onclick="showYearMonthpicker()"><i class="zmdi zmdi-calendar-check"></i></a></li>
               </ul>
-              <h2 class="lvh-label hidden-xs pull-right">Year and Month here</h2>
+              <h2 id="info-calendar" class="lvh-label hidden-xs pull-right">Year and Month here</h2>
             </div>
             <!-- Expense Calendar -->
             <div id="expense-calendar" class="card-body">
@@ -161,6 +161,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   getExpenseCalendar(today.year, today.month);
+  $("#info-calendar").text(moment().format('MMM YYYY'));
 });
 
 function loadCalendar() {
@@ -377,6 +378,23 @@ function deleteExpense(pk) {
   });
 }
 
+function showYearMonthpicker() {
+  var myDatepicker = $('#expense-date').datepicker({
+    language: 'en',
+    maxDate: new Date(),
+    minView: "months",
+    view: "months",
+    dateFormat: "M yyyy",
+    onSelect: function(formattedDate, date, inst){
+      var month = Number(moment(date).format('M'));
+      var year = Number(moment(date).format('YYYY'));
+      getExpenseCalendar(year, month);
+      $("#info-calendar").text(formattedDate);
+    }
+  }).data('datepicker');
+
+  myDatepicker.show();
+}
 //Update by cedaus on 11th Feb 2017
 </script>
 {% endblock %}
